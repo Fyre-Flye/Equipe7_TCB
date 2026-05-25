@@ -1,1 +1,68 @@
-    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.04s
+   0.038981600s  INFO prepare_target{force=false package_id=rust v0.1.0 (C:\Users\gusta\OneDrive\Documentos\Equipe7_TCB\rust) target="variacao_k"}: cargo::core::compiler::fingerprint: stale: changed "C:\\Users\\gusta\\OneDrive\\Documentos\\Equipe7_TCB\\rust\\src\\bin\\variacao_k.rs"
+   0.039200700s  INFO prepare_target{force=false package_id=rust v0.1.0 (C:\Users\gusta\OneDrive\Documentos\Equipe7_TCB\rust) target="variacao_k"}: cargo::core::compiler::fingerprint:           (vs) "C:\\Users\\gusta\\OneDrive\\Documentos\\Equipe7_TCB\\rust\\target\\debug\\.fingerprint\\rust-38d46e783e4804c0\\dep-bin-variacao_k"
+   0.039210100s  INFO prepare_target{force=false package_id=rust v0.1.0 (C:\Users\gusta\OneDrive\Documentos\Equipe7_TCB\rust) target="variacao_k"}: cargo::core::compiler::fingerprint:                FileTime { seconds: 13424140902, nanos: 242729400 } < FileTime { seconds: 13424140903, nanos: 384390300 }
+   0.039618300s  INFO prepare_target{force=false package_id=rust v0.1.0 (C:\Users\gusta\OneDrive\Documentos\Equipe7_TCB\rust) target="variacao_k"}: cargo::core::compiler::fingerprint: fingerprint dirty for rust v0.1.0 (C:\Users\gusta\OneDrive\Documentos\Equipe7_TCB\rust)/Check { test: false }/TargetInner { name: "variacao_k", doc: true, ..: with_path("C:\\Users\\gusta\\OneDrive\\Documentos\\Equipe7_TCB\\rust\\src\\bin\\variacao_k.rs", Edition2024) }
+   0.039647100s  INFO prepare_target{force=false package_id=rust v0.1.0 (C:\Users\gusta\OneDrive\Documentos\Equipe7_TCB\rust) target="variacao_k"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleItem(ChangedFile { reference: "C:\\Users\\gusta\\OneDrive\\Documentos\\Equipe7_TCB\\rust\\target\\debug\\.fingerprint\\rust-38d46e783e4804c0\\dep-bin-variacao_k", reference_mtime: FileTime { seconds: 13424140902, nanos: 242729400 }, stale: "C:\\Users\\gusta\\OneDrive\\Documentos\\Equipe7_TCB\\rust\\src\\bin\\variacao_k.rs", stale_mtime: FileTime { seconds: 13424140903, nanos: 384390300 } }))
+   0.041521800s  INFO prepare_target{force=false package_id=rust v0.1.0 (C:\Users\gusta\OneDrive\Documentos\Equipe7_TCB\rust) target="variacao_k"}: cargo::core::compiler::fingerprint: stale: changed "C:\\Users\\gusta\\OneDrive\\Documentos\\Equipe7_TCB\\rust\\src\\bin\\variacao_k.rs"
+   0.041536300s  INFO prepare_target{force=false package_id=rust v0.1.0 (C:\Users\gusta\OneDrive\Documentos\Equipe7_TCB\rust) target="variacao_k"}: cargo::core::compiler::fingerprint:           (vs) "C:\\Users\\gusta\\OneDrive\\Documentos\\Equipe7_TCB\\rust\\target\\debug\\.fingerprint\\rust-ea2fa13874cd2b18\\dep-test-bin-variacao_k"
+   0.041542100s  INFO prepare_target{force=false package_id=rust v0.1.0 (C:\Users\gusta\OneDrive\Documentos\Equipe7_TCB\rust) target="variacao_k"}: cargo::core::compiler::fingerprint:                FileTime { seconds: 13424140902, nanos: 242729400 } < FileTime { seconds: 13424140903, nanos: 384390300 }
+   0.041868300s  INFO prepare_target{force=false package_id=rust v0.1.0 (C:\Users\gusta\OneDrive\Documentos\Equipe7_TCB\rust) target="variacao_k"}: cargo::core::compiler::fingerprint: fingerprint dirty for rust v0.1.0 (C:\Users\gusta\OneDrive\Documentos\Equipe7_TCB\rust)/Check { test: true }/TargetInner { name: "variacao_k", doc: true, ..: with_path("C:\\Users\\gusta\\OneDrive\\Documentos\\Equipe7_TCB\\rust\\src\\bin\\variacao_k.rs", Edition2024) }
+   0.041885500s  INFO prepare_target{force=false package_id=rust v0.1.0 (C:\Users\gusta\OneDrive\Documentos\Equipe7_TCB\rust) target="variacao_k"}: cargo::core::compiler::fingerprint:     dirty: FsStatusOutdated(StaleItem(ChangedFile { reference: "C:\\Users\\gusta\\OneDrive\\Documentos\\Equipe7_TCB\\rust\\target\\debug\\.fingerprint\\rust-ea2fa13874cd2b18\\dep-test-bin-variacao_k", reference_mtime: FileTime { seconds: 13424140902, nanos: 242729400 }, stale: "C:\\Users\\gusta\\OneDrive\\Documentos\\Equipe7_TCB\\rust\\src\\bin\\variacao_k.rs", stale_mtime: FileTime { seconds: 13424140903, nanos: 384390300 } }))
+   0.043244500s  INFO prepare_target{force=false package_id=rust v0.1.0 (C:\Users\gusta\OneDrive\Documentos\Equipe7_TCB\rust) target="visualizacao"}: cargo::core::compiler::fingerprint: fingerprint error for rust v0.1.0 (C:\Users\gusta\OneDrive\Documentos\Equipe7_TCB\rust)/Check { test: false }/TargetInner { name: "visualizacao", doc: true, ..: with_path("C:\\Users\\gusta\\OneDrive\\Documentos\\Equipe7_TCB\\rust\\src\\bin\\visualizacao.rs", Edition2024) }
+   0.043268600s  INFO prepare_target{force=false package_id=rust v0.1.0 (C:\Users\gusta\OneDrive\Documentos\Equipe7_TCB\rust) target="visualizacao"}: cargo::core::compiler::fingerprint:     err: failed to read `C:\Users\gusta\OneDrive\Documentos\Equipe7_TCB\rust\target\debug\.fingerprint\rust-55cc136530e16ed5\bin-visualizacao`
+
+Caused by:
+    The system cannot find the file specified. (os error 2)
+
+Stack backtrace:
+   0: git_midx_writer_dump
+   1: git_midx_writer_dump
+   2: git_midx_writer_dump
+   3: git_midx_writer_dump
+   4: git_filter_source_repo
+   5: git_filter_source_repo
+   6: git_filter_source_repo
+   7: git_filter_source_repo
+   8: git_filter_source_repo
+   9: git_filter_source_repo
+  10: git_filter_source_repo
+  11: git_libgit2_prerelease
+  12: <unknown>
+  13: <unknown>
+  14: <unknown>
+  15: <unknown>
+  16: git_midx_writer_dump
+  17: git_filter_source_repo
+  18: git_midx_writer_dump
+  19: BaseThreadInitThunk
+  20: RtlUserThreadStart
+   0.065093100s  INFO prepare_target{force=false package_id=rust v0.1.0 (C:\Users\gusta\OneDrive\Documentos\Equipe7_TCB\rust) target="visualizacao"}: cargo::core::compiler::fingerprint: fingerprint error for rust v0.1.0 (C:\Users\gusta\OneDrive\Documentos\Equipe7_TCB\rust)/Check { test: true }/TargetInner { name: "visualizacao", doc: true, ..: with_path("C:\\Users\\gusta\\OneDrive\\Documentos\\Equipe7_TCB\\rust\\src\\bin\\visualizacao.rs", Edition2024) }
+   0.065115100s  INFO prepare_target{force=false package_id=rust v0.1.0 (C:\Users\gusta\OneDrive\Documentos\Equipe7_TCB\rust) target="visualizacao"}: cargo::core::compiler::fingerprint:     err: failed to read `C:\Users\gusta\OneDrive\Documentos\Equipe7_TCB\rust\target\debug\.fingerprint\rust-8968b01429f5a7a8\test-bin-visualizacao`
+
+Caused by:
+    The system cannot find the file specified. (os error 2)
+
+Stack backtrace:
+   0: git_midx_writer_dump
+   1: git_midx_writer_dump
+   2: git_midx_writer_dump
+   3: git_midx_writer_dump
+   4: git_filter_source_repo
+   5: git_filter_source_repo
+   6: git_filter_source_repo
+   7: git_filter_source_repo
+   8: git_filter_source_repo
+   9: git_filter_source_repo
+  10: git_filter_source_repo
+  11: git_libgit2_prerelease
+  12: <unknown>
+  13: <unknown>
+  14: <unknown>
+  15: <unknown>
+  16: git_midx_writer_dump
+  17: git_filter_source_repo
+  18: git_midx_writer_dump
+  19: BaseThreadInitThunk
+  20: RtlUserThreadStart
+    Checking rust v0.1.0 (C:\Users\gusta\OneDrive\Documentos\Equipe7_TCB\rust)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.41s

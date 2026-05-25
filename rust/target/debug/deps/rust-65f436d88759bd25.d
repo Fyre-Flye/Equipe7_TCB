@@ -3,5 +3,3 @@ C:\Users\gusta\OneDrive\Documentos\Equipe7_TCB\rust\target\debug\deps\rust-65f43
 C:\Users\gusta\OneDrive\Documentos\Equipe7_TCB\rust\target\debug\deps\librust-65f436d88759bd25.rmeta: src\main.rs
 
 src\main.rs:
-
-# env-dep:CARGO_MANIFEST_DIR=C:\\Users\\gusta\\OneDrive\\Documentos\\Equipe7_TCB\\rust

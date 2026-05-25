@@ -1,0 +1,15 @@
+__pycache__/
+*.py[cod]
+
+.ipynb_checkpoints/
+
+rust/target/
+*.exe
+*.pdb
+
+analise/ipython/
+analise/jupyter_config/
+analise/jupyter_data/
+analise/jupyter_runtime/
+analise/matplotlib_config/
+
