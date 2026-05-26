@@ -61,6 +61,8 @@ No Counting Sort, a complexidade teorica e `O(n + k)`, onde `n` e o tamanho da e
 
 ## Como executar
 
+### Windows / PowerShell
+
 Gere o CSV principal do Python:
 
 ```powershell
@@ -109,6 +111,27 @@ Abra o notebook de analise:
 
 ```powershell
 jupyter notebook .\analise\notebooks\padronizacao_graficos.ipynb
+```
+
+### Ubuntu / Bash
+
+Prepare o ambiente Python e verifique Rust/Cargo:
+
+```bash
+bash scripts/setup_ubuntu.sh
+```
+
+Rode o fluxo completo:
+
+```bash
+bash scripts/run_all.sh
+```
+
+Ou rode por partes:
+
+```bash
+bash scripts/run_benchmarks.sh
+bash scripts/run_notebook.sh
 ```
 
 ## Saidas principais
