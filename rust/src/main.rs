@@ -60,7 +60,7 @@ fn output_path() -> std::io::Result<PathBuf> {
     let current_dir = env::current_dir()?;
     let project_root = find_project_root(&current_dir).unwrap_or(current_dir);
 
-    let output_dir = project_root.join("analise");
+    let output_dir = project_root.join("analise").join("dados");
     create_dir_all(&output_dir)?;
     Ok(output_dir.join("resultados_rust.csv"))
 }

@@ -49,7 +49,7 @@ def total_ram_gb():
 
 def output_path():
     project_root = Path(__file__).resolve().parents[1]
-    output_dir = project_root / "analise"
+    output_dir = project_root / "analise" / "ambiente"
     output_dir.mkdir(exist_ok=True)
     return output_dir / "ambiente_execucao.txt"
 

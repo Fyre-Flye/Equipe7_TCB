@@ -54,8 +54,8 @@ def is_sorted(values):
 
 
 def output_path():
-    project_root = Path(__file__).resolve().parents[1]
-    output_dir = project_root / "analise"
+    project_root = Path(__file__).resolve().parents[2]
+    output_dir = project_root / "analise" / "dados"
     output_dir.mkdir(exist_ok=True)
     return output_dir / "resultados_python.csv"
 

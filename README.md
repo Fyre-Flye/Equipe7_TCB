@@ -4,21 +4,46 @@ Projeto de Teoria da Computacao para analisar o algoritmo Counting Sort em duas 
 
 ## Estrutura
 
-- `python/counting_sort.py`: benchmark do Counting Sort em Python.
-- `python/counting_sort_visual.py`: execucao didatica do Counting Sort em Python.
-- `python/variacao_k.py`: experimento complementar variando o intervalo `k`.
-- `python/ambiente_execucao.py`: gera um resumo do ambiente de execucao.
-- `rust/src/main.rs`: benchmark do Counting Sort em Rust.
-- `rust/src/bin/visualizacao.rs`: execucao didatica do Counting Sort em Rust.
+```text
+Equipe7_TCB/
+├─ python/
+│  ├─ benchmark/
+│  │  ├─ counting_sort.py
+│  │  └─ variacao_k.py
+│  ├─ visualizacao/
+│  │  └─ counting_sort_visual.py
+│  └─ ambiente_execucao.py
+├─ rust/
+│  ├─ Cargo.toml
+│  └─ src/
+│     ├─ main.rs
+│     └─ bin/
+│        ├─ variacao_k.rs
+│        └─ visualizacao.rs
+├─ analise/
+│  ├─ dados/
+│  ├─ tabelas/
+│  ├─ graficos/
+│  ├─ notebooks/
+│  └─ ambiente/
+├─ README.md
+└─ .gitignore
+```
+
+## Principais arquivos
+
+- `python/benchmark/counting_sort.py`: benchmark principal em Python.
+- `python/benchmark/variacao_k.py`: experimento complementar em Python variando `k`.
+- `python/visualizacao/counting_sort_visual.py`: execucao didatica em Python.
+- `python/ambiente_execucao.py`: gera resumo do ambiente de execucao.
+- `rust/src/main.rs`: benchmark principal em Rust.
 - `rust/src/bin/variacao_k.rs`: experimento complementar em Rust variando `k`.
-- `analise/resultados_python.csv`: medicoes geradas pelo Python.
-- `analise/resultados_rust.csv`: medicoes geradas pelo Rust.
-- `analise/padronizacao_graficos.ipynb`: notebook para tabelas, graficos e curva teorica.
-- `analise/graficos/`: imagens geradas pelo notebook.
+- `rust/src/bin/visualizacao.rs`: execucao didatica em Rust.
+- `analise/notebooks/padronizacao_graficos.ipynb`: notebook de tabelas e graficos.
 
 ## Metodologia
 
-Os benchmarks executam o Counting Sort em tres tamanhos de entrada:
+Os benchmarks principais executam o Counting Sort em tres tamanhos de entrada:
 
 - pequena: `1.000` elementos;
 - media: `10.000` elementos;
@@ -32,17 +57,17 @@ Para cada tamanho, sao testados tres casos:
 
 Cada combinacao de linguagem, tamanho e caso e executada `30` vezes. Os CSVs registram a linguagem, o caso, o tamanho `n`, o valor de `k`, a rodada, o tempo em segundos e se a saida ficou ordenada.
 
-No Counting Sort, a complexidade teorica e `O(n + k)`, onde `n` e o tamanho da entrada e `k` e o intervalo de valores. Nos testes atuais, `k = n`.
+No Counting Sort, a complexidade teorica e `O(n + k)`, onde `n` e o tamanho da entrada e `k` e o intervalo de valores. Nos testes principais, `k = n`.
 
 ## Como executar
 
-Gere o CSV do Python:
+Gere o CSV principal do Python:
 
 ```powershell
-python .\python\counting_sort.py
+python .\python\benchmark\counting_sort.py
 ```
 
-Gere o CSV do Rust em modo otimizado:
+Gere o CSV principal do Rust em modo otimizado:
 
 ```powershell
 cargo run --release --manifest-path .\rust\Cargo.toml
@@ -51,23 +76,23 @@ cargo run --release --manifest-path .\rust\Cargo.toml
 Gere os CSVs complementares da variacao de `k`:
 
 ```powershell
-python .\python\variacao_k.py
+python .\python\benchmark\variacao_k.py
 cargo run --release --manifest-path .\rust\Cargo.toml --bin variacao_k
 ```
 
 Execute as versoes didaticas para visualizar o funcionamento do algoritmo:
 
 ```powershell
-python .\python\counting_sort_visual.py
+python .\python\visualizacao\counting_sort_visual.py
 cargo run --manifest-path .\rust\Cargo.toml --bin visualizacao
 ```
 
 Essas versoes usam um pequeno atraso automatico entre as etapas. Para controlar a velocidade:
 
 ```powershell
-python .\python\counting_sort_visual.py --fast
-python .\python\counting_sort_visual.py --slow
-python .\python\counting_sort_visual.py --no-delay
+python .\python\visualizacao\counting_sort_visual.py --fast
+python .\python\visualizacao\counting_sort_visual.py --slow
+python .\python\visualizacao\counting_sort_visual.py --no-delay
 
 cargo run --manifest-path .\rust\Cargo.toml --bin visualizacao -- --fast
 cargo run --manifest-path .\rust\Cargo.toml --bin visualizacao -- --slow
@@ -83,28 +108,38 @@ python .\python\ambiente_execucao.py
 Abra o notebook de analise:
 
 ```powershell
-jupyter notebook .\analise\padronizacao_graficos.ipynb
+jupyter notebook .\analise\notebooks\padronizacao_graficos.ipynb
 ```
 
 ## Saidas principais
 
-Os benchmarks geram:
+Os benchmarks geram dados brutos em `analise/dados/`:
 
-- `analise/resultados_python.csv`
-- `analise/resultados_rust.csv`
-- `analise/resultados_python_variacao_k.csv`
-- `analise/resultados_rust_variacao_k.csv`
+- `resultados_python.csv`
+- `resultados_rust.csv`
+- `resultados_python_variacao_k.csv`
+- `resultados_rust_variacao_k.csv`
 
-O notebook gera:
+O notebook gera tabelas em `analise/tabelas/`:
 
-- `analise/resumo_tempos.csv`
-- `analise/resumo_tempos_com_teoria.csv`
-- `analise/resumo_variacao_k.csv`
-- `analise/speedup_rust_vs_python.csv`
-- `analise/graficos/01_tempos_reais_log.png`
-- `analise/graficos/02_real_vs_teorico_log.png`
-- `analise/graficos/03_comparacao_linguagens_barras_log.png`
-- `analise/graficos/04_speedup_rust_vs_python.png`
+- `resumo_tempos.csv`
+- `resumo_tempos_com_teoria.csv`
+- `resumo_variacao_k.csv`
+- `speedup_rust_vs_python.csv`
+
+O notebook gera graficos em `analise/graficos/`:
+
+- `01_tempos_reais_log.png`
+- `02_real_vs_teorico_log.png`
+- `03_comparacao_linguagens_barras_log.png`
+- `04_velocidade_linguagens_log.png`
+- `05_speedup_rust_vs_python.png`
+- `06_variacao_k_tempos_log.png`
+- `07_variacao_k_real_vs_teorico_log.png`
+
+O ambiente de execucao fica em:
+
+- `analise/ambiente/ambiente_execucao.txt`
 
 ## Observacoes para o relatorio
 
