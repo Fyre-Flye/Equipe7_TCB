@@ -8,6 +8,10 @@ if [ -d ".venv" ]; then
   source .venv/bin/activate
 fi
 
+if [ -f "$HOME/.cargo/env" ]; then
+  source "$HOME/.cargo/env"
+fi
+
 if [ -z "${PYTHON_BIN:-}" ]; then
   if command -v python >/dev/null 2>&1; then
     PYTHON_BIN="python"

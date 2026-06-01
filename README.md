@@ -63,6 +63,27 @@ No Counting Sort, a complexidade teorica e `O(n + k)`, onde `n` e o tamanho da e
 
 ### Windows / PowerShell
 
+Prepare o ambiente Python e verifique Rust/Cargo:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\setup_windows.ps1
+```
+
+Rode o fluxo completo:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\run_all.ps1
+```
+
+Ou rode por partes:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\run_benchmarks.ps1
+powershell -ExecutionPolicy Bypass -File .\scripts\run_notebook.ps1
+```
+
+Os comandos abaixo tambem podem ser executados manualmente.
+
 Gere o CSV principal do Python:
 
 ```powershell
@@ -115,7 +136,7 @@ jupyter notebook .\analise\notebooks\padronizacao_graficos.ipynb
 
 ### Ubuntu / Bash
 
-Prepare o ambiente Python e verifique Rust/Cargo:
+Prepare automaticamente o ambiente. Em Ubuntu/Debian, o script instala os pacotes ausentes com `apt-get`, cria `.venv`, instala as bibliotecas Python e instala Rust/Cargo pelo `rustup` se necessario:
 
 ```bash
 bash scripts/setup_ubuntu.sh

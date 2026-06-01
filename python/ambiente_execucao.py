@@ -22,8 +22,40 @@ def run_command(command):
     return output.splitlines()[0] if output else "Nao encontrado"
 
 
+def operating_system():
+    system = platform.system()
+    if system.lower() == "linux":
+        description = run_command(["lsb_release", "-ds"])
+        if description != "Nao encontrado":
+            return f"{description.strip('\"')} ({platform.release()})"
+
+    return platform.platform()
+
+
+def processor_name():
+    system = platform.system().lower()
+    if system == "linux":
+        cpuinfo_path = Path("/proc/cpuinfo")
+        if cpuinfo_path.exists():
+            for line in cpuinfo_path.read_text(encoding="utf-8", errors="ignore").splitlines():
+                if line.lower().startswith("model name"):
+                    return line.split(":", maxsplit=1)[-1].strip()
+
+    return platform.processor() or platform.uname().processor or "Nao identificado"
+
+
 def total_ram_gb():
-    if platform.system().lower() != "windows":
+    system = platform.system().lower()
+    if system == "linux":
+        meminfo_path = Path("/proc/meminfo")
+        if meminfo_path.exists():
+            for line in meminfo_path.read_text(encoding="utf-8", errors="ignore").splitlines():
+                if line.startswith("MemTotal:"):
+                    total_kib = int(line.split()[1])
+                    return f"{total_kib / (1024**2):.2f} GB"
+        return "Nao identificado automaticamente"
+
+    if system != "windows":
         return "Nao identificado automaticamente"
 
     class MemoryStatusEx(ctypes.Structure):
@@ -47,6 +79,53 @@ def total_ram_gb():
     return f"{status.ullTotalPhys / (1024**3):.2f} GB"
 
 
+def processor_frequency():
+    system = platform.system().lower()
+    if system == "linux":
+        cpuinfo_path = Path("/proc/cpuinfo")
+        if cpuinfo_path.exists():
+            for line in cpuinfo_path.read_text(encoding="utf-8", errors="ignore").splitlines():
+                if line.lower().startswith("cpu mhz"):
+                    mhz = float(line.split(":", maxsplit=1)[-1].strip())
+                    return f"{mhz / 1000:.2f} GHz"
+
+        frequency_khz_path = Path("/sys/devices/system/cpu/cpu0/cpufreq/cpuinfo_max_freq")
+        if frequency_khz_path.exists():
+            frequency_khz = int(frequency_khz_path.read_text(encoding="utf-8").strip())
+            return f"{frequency_khz / 1_000_000:.2f} GHz"
+
+    if system == "windows":
+        try:
+            import winreg
+
+            with winreg.OpenKey(
+                winreg.HKEY_LOCAL_MACHINE,
+                r"HARDWARE\DESCRIPTION\System\CentralProcessor\0",
+            ) as key:
+                mhz, _ = winreg.QueryValueEx(key, "~MHz")
+                return f"{mhz / 1000:.2f} GHz"
+        except (OSError, ImportError):
+            pass
+
+        powershell_result = run_command(
+            [
+                "powershell",
+                "-NoProfile",
+                "-Command",
+                "(Get-CimInstance Win32_Processor | Select-Object -First 1 -ExpandProperty MaxClockSpeed)",
+            ]
+        )
+        if powershell_result.isdigit():
+            return f"{int(powershell_result) / 1000:.2f} GHz"
+
+        wmic_result = run_command(["wmic", "cpu", "get", "MaxClockSpeed", "/format:list"])
+        if "=" in wmic_result:
+            mhz = int(wmic_result.split("=", maxsplit=1)[-1])
+            return f"{mhz / 1000:.2f} GHz"
+
+    return "Nao identificado automaticamente"
+
+
 def output_path():
     project_root = Path(__file__).resolve().parents[1]
     output_dir = project_root / "analise" / "ambiente"
@@ -56,15 +135,16 @@ def output_path():
 
 def main():
     info = {
-        "Sistema operacional": platform.platform(),
-        "Processador": platform.processor() or platform.uname().processor or "Nao identificado",
+        "Sistema operacional": operating_system(),
+        "Processador": processor_name(),
+        "Arquitetura": platform.architecture()[0],
+        "Frequencia do processador": processor_frequency(),
         "Nucleos logicos": str(os.cpu_count() or "Nao identificado"),
         "RAM total": total_ram_gb(),
         "Python": sys.version.replace("\n", " "),
         "Rust": run_command(["rustc", "--version"]),
         "Cargo": run_command(["cargo", "--version"]),
-        "Modo recomendado para Rust": "cargo run --release",
-        "Observacao": "Fechar programas em segundo plano antes de coletar os tempos finais.",
+        "Modo recomendado para Rust": "cargo run --release"
     }
 
     path = output_path()

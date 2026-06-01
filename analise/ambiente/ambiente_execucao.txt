@@ -3,10 +3,11 @@ Ambiente de execucao
 
 Sistema operacional: Windows-11-10.0.26200-SP0
 Processador: AMD64 Family 25 Model 80 Stepping 0, AuthenticAMD
+Arquitetura: 64bit
+Frequencia do processador: 3.89 GHz
 Nucleos logicos: 12
 RAM total: 15.37 GB
 Python: 3.13.7 (tags/v3.13.7:bcee1c3, Aug 14 2025, 14:15:11) [MSC v.1944 64 bit (AMD64)]
 Rust: rustc 1.95.0 (59807616e 2026-04-14)
 Cargo: cargo 1.95.0 (f2d3ce0bd 2026-03-21)
 Modo recomendado para Rust: cargo run --release
-Observacao: Fechar programas em segundo plano antes de coletar os tempos finais.
