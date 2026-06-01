@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 cd "$ROOT_DIR"
 
 if ! command -v apt-get >/dev/null 2>&1; then
@@ -68,5 +68,4 @@ pip --version
 rustc --version
 cargo --version
 
-echo "Ambiente pronto. Execute: bash scripts/run_all.sh"
-
+echo "Ambiente pronto. Execute: bash scripts/linux/run_all.sh"

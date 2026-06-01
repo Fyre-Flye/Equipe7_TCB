@@ -1,6 +1,6 @@
 $ErrorActionPreference = "Stop"
 
-$RootDir = Split-Path -Parent $PSScriptRoot
+$RootDir = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
 Set-Location $RootDir
 
 Write-Host "==> Verificando Python"
@@ -24,4 +24,3 @@ if (-not (Get-Command cargo -ErrorAction SilentlyContinue)) {
 }
 
 Write-Host "Ambiente pronto."
-

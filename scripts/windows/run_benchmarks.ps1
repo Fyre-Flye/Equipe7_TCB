@@ -1,6 +1,6 @@
 $ErrorActionPreference = "Stop"
 
-$RootDir = Split-Path -Parent $PSScriptRoot
+$RootDir = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
 Set-Location $RootDir
 
 $VenvPython = Join-Path $RootDir ".venv\Scripts\python.exe"
@@ -19,4 +19,3 @@ Write-Host "==> Gerando CSV complementar de variacao de k em Rust"
 cargo run --release --manifest-path ".\rust\Cargo.toml" --bin variacao_k
 
 Write-Host "Benchmarks concluidos."
-

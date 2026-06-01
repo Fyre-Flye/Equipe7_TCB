@@ -1,6 +1,6 @@
 $ErrorActionPreference = "Stop"
 
-$RootDir = Split-Path -Parent $PSScriptRoot
+$RootDir = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
 Set-Location $RootDir
 
 $VenvPython = Join-Path $RootDir ".venv\Scripts\python.exe"
@@ -28,4 +28,3 @@ Write-Host "==> Executando notebook de analise"
     --output-dir "$RootDir\analise\notebooks"
 
 Write-Host "Notebook executado."
-

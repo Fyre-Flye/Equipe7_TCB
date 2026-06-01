@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 cd "$ROOT_DIR"
 
 if [ -d ".venv" ]; then
@@ -24,9 +24,9 @@ echo "==> Registrando ambiente de execucao"
 "$PYTHON_BIN" python/ambiente_execucao.py
 
 echo "==> Rodando benchmarks"
-bash scripts/run_benchmarks.sh
+bash scripts/linux/run_benchmarks.sh
 
 echo "==> Gerando tabelas e graficos"
-bash scripts/run_notebook.sh
+bash scripts/linux/run_notebook.sh
 
 echo "Fluxo completo concluido."
