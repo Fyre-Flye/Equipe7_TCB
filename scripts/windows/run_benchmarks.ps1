@@ -6,16 +6,24 @@ Set-Location $RootDir
 $VenvPython = Join-Path $RootDir ".venv\Scripts\python.exe"
 $PythonBin = if (Test-Path $VenvPython) { $VenvPython } else { "python" }
 
+function Invoke-NativeChecked {
+    param([scriptblock]$Command)
+    & $Command
+    if ($LASTEXITCODE -ne 0) {
+        throw "Comando falhou com codigo de saida $LASTEXITCODE"
+    }
+}
+
 Write-Host "==> Gerando CSV principal do Python"
-& $PythonBin ".\python\benchmark\counting_sort.py"
+Invoke-NativeChecked { & $PythonBin ".\python\benchmark\counting_sort.py" }
 
 Write-Host "==> Gerando CSV principal do Rust"
-cargo run --release --manifest-path ".\rust\Cargo.toml"
+Invoke-NativeChecked { cargo run --release --manifest-path ".\rust\Cargo.toml" }
 
 Write-Host "==> Gerando CSV complementar de variacao de k em Python"
-& $PythonBin ".\python\benchmark\variacao_k.py"
+Invoke-NativeChecked { & $PythonBin ".\python\benchmark\variacao_k.py" }
 
 Write-Host "==> Gerando CSV complementar de variacao de k em Rust"
-cargo run --release --manifest-path ".\rust\Cargo.toml" --bin variacao_k
+Invoke-NativeChecked { cargo run --release --manifest-path ".\rust\Cargo.toml" --bin variacao_k }
 
 Write-Host "Benchmarks concluidos."

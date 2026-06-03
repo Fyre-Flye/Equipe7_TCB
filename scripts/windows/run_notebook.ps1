@@ -6,6 +6,14 @@ Set-Location $RootDir
 $VenvPython = Join-Path $RootDir ".venv\Scripts\python.exe"
 $PythonBin = if (Test-Path $VenvPython) { $VenvPython } else { "python" }
 
+function Invoke-NativeChecked {
+    param([scriptblock]$Command)
+    & $Command
+    if ($LASTEXITCODE -ne 0) {
+        throw "Comando falhou com codigo de saida $LASTEXITCODE"
+    }
+}
+
 $env:JUPYTER_ALLOW_INSECURE_WRITES = "1"
 $env:IPYTHONDIR = Join-Path $RootDir "analise\ipython"
 $env:JUPYTER_CONFIG_DIR = Join-Path $RootDir "analise\jupyter_config"
@@ -21,10 +29,12 @@ New-Item -ItemType Directory -Force -Path `
     $env:MPLCONFIGDIR | Out-Null
 
 Write-Host "==> Executando notebook de analise"
-& $PythonBin -m jupyter nbconvert `
-    --to notebook `
-    --execute "$RootDir\analise\notebooks\padronizacao_graficos.ipynb" `
-    --output "padronizacao_graficos_executado.ipynb" `
-    --output-dir "$RootDir\analise\notebooks"
+Invoke-NativeChecked {
+    & $PythonBin -m jupyter nbconvert `
+        --to notebook `
+        --execute "$RootDir\analise\notebooks\padronizacao_graficos.ipynb" `
+        --output "padronizacao_graficos_executado.ipynb" `
+        --output-dir "$RootDir\analise\notebooks"
+}
 
 Write-Host "Notebook executado."

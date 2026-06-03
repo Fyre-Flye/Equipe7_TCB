@@ -27,7 +27,8 @@ def operating_system():
     if system.lower() == "linux":
         description = run_command(["lsb_release", "-ds"])
         if description != "Nao encontrado":
-            return f"{description.strip('\"')} ({platform.release()})"
+            clean_description = description.strip('"')
+            return f"{clean_description} ({platform.release()})"
 
     return platform.platform()
 

@@ -6,8 +6,16 @@ Set-Location $RootDir
 $VenvPython = Join-Path $RootDir ".venv\Scripts\python.exe"
 $PythonBin = if (Test-Path $VenvPython) { $VenvPython } else { "python" }
 
+function Invoke-NativeChecked {
+    param([scriptblock]$Command)
+    & $Command
+    if ($LASTEXITCODE -ne 0) {
+        throw "Comando falhou com codigo de saida $LASTEXITCODE"
+    }
+}
+
 Write-Host "==> Registrando ambiente de execucao"
-& $PythonBin ".\python\ambiente_execucao.py"
+Invoke-NativeChecked { & $PythonBin ".\python\ambiente_execucao.py" }
 
 Write-Host "==> Rodando benchmarks"
 & ".\scripts\windows\run_benchmarks.ps1"
