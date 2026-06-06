@@ -28,6 +28,7 @@ New-Item -ItemType Directory -Force -Path `
     $env:JUPYTER_RUNTIME_DIR, `
     $env:MPLCONFIGDIR | Out-Null
 
+$stopwatch = [System.Diagnostics.Stopwatch]::StartNew()
 Write-Host "==> Executando notebook de analise"
 Invoke-NativeChecked {
     & $PythonBin -m jupyter nbconvert `
@@ -37,4 +38,6 @@ Invoke-NativeChecked {
         --output-dir "$RootDir\analise\notebooks"
 }
 
-Write-Host "Notebook executado."
+$stopwatch.Stop()
+$duration = "{0:00}:{1:00}:{2:00}" -f [math]::Floor($stopwatch.Elapsed.TotalHours), $stopwatch.Elapsed.Minutes, $stopwatch.Elapsed.Seconds
+Write-Host "Notebook executado em $duration."

@@ -20,16 +20,35 @@ if [ -z "${PYTHON_BIN:-}" ]; then
   fi
 fi
 
-echo "==> Gerando CSV principal do Python"
-"$PYTHON_BIN" python/benchmark/counting_sort.py
+format_duration() {
+  local total_seconds="$1"
+  printf '%02d:%02d:%02d' \
+    $((total_seconds / 3600)) \
+    $(((total_seconds % 3600) / 60)) \
+    $((total_seconds % 60))
+}
 
-echo "==> Gerando CSV principal do Rust"
-cargo run --release --manifest-path rust/Cargo.toml
+run_benchmark_step() {
+  local step="$1"
+  local total="$2"
+  local name="$3"
+  shift 3
 
-echo "==> Gerando CSV complementar de variacao de k em Python"
-"$PYTHON_BIN" python/benchmark/variacao_k.py
+  echo "    -> [$step/$total] $name"
+  local start_time=$SECONDS
+  "$@"
+  echo "       Concluido em $(format_duration $((SECONDS - start_time)))."
+}
 
-echo "==> Gerando CSV complementar de variacao de k em Rust"
-cargo run --release --manifest-path rust/Cargo.toml --bin variacao_k
+TOTAL_START=$SECONDS
 
-echo "Benchmarks concluidos."
+run_benchmark_step 1 3 "Gerando plano compartilhado de entradas" \
+  "$PYTHON_BIN" python/benchmark/entradas_benchmark.py
+run_benchmark_step 2 3 "Executando benchmark do Python" \
+  env BENCHMARK_PROGRESS_OFFSET=0 BENCHMARK_PROGRESS_TOTAL=180 \
+  "$PYTHON_BIN" python/benchmark/counting_sort.py
+run_benchmark_step 3 3 "Executando benchmark do Rust" \
+  env BENCHMARK_PROGRESS_OFFSET=90 BENCHMARK_PROGRESS_TOTAL=180 \
+  cargo run --release --manifest-path rust/Cargo.toml
+
+echo "Benchmarks concluidos em $(format_duration $((SECONDS - TOTAL_START)))."

@@ -6,61 +6,63 @@ Projeto de Teoria da Computacao para analisar o algoritmo Counting Sort em duas 
 
 ```text
 Equipe7_TCB/
-├─ python/
-│  ├─ benchmark/
-│  │  ├─ counting_sort.py
-│  │  └─ variacao_k.py
-│  ├─ visualizacao/
-│  │  └─ counting_sort_visual.py
-│  └─ ambiente_execucao.py
-├─ rust/
-│  ├─ Cargo.toml
-│  └─ src/
-│     ├─ main.rs
-│     └─ bin/
-│        ├─ variacao_k.rs
-│        └─ visualizacao.rs
-├─ analise/
-│  ├─ dados/
-│  ├─ tabelas/
-│  ├─ graficos/
-│  ├─ notebooks/
-│  └─ ambiente/
-├─ scripts/
-│  ├─ windows/
-│  └─ linux/
-├─ README.md
-└─ .gitignore
+|- python/
+|  |- benchmark/
+|  |  |- entradas_benchmark.py
+|  |  `- counting_sort.py
+|  |- visualizacao/
+|  |  `- counting_sort_visual.py
+|  `- ambiente_execucao.py
+|- rust/
+|  |- Cargo.toml
+|  `- src/
+|     |- main.rs
+|     `- bin/
+|        `- visualizacao.rs
+|- analise/
+|  |- dados/
+|  |- tabelas/
+|  |- graficos/
+|  |- notebooks/
+|  `- ambiente/
+|- scripts/
+|  |- windows/
+|  `- linux/
+|- requirements.txt
+|- README.md
+`- .gitignore
 ```
 
 ## Principais arquivos
 
+- `python/benchmark/entradas_benchmark.py`: gera o plano compartilhado de entradas usado pelas duas linguagens.
 - `python/benchmark/counting_sort.py`: benchmark principal em Python.
-- `python/benchmark/variacao_k.py`: experimento complementar em Python variando `k`.
-- `python/visualizacao/counting_sort_visual.py`: execucao didatica em Python.
-- `python/ambiente_execucao.py`: gera resumo do ambiente de execucao.
 - `rust/src/main.rs`: benchmark principal em Rust.
-- `rust/src/bin/variacao_k.rs`: experimento complementar em Rust variando `k`.
+- `python/visualizacao/counting_sort_visual.py`: execucao didatica em Python.
 - `rust/src/bin/visualizacao.rs`: execucao didatica em Rust.
+- `python/ambiente_execucao.py`: gera resumo do ambiente de execucao.
 - `analise/notebooks/padronizacao_graficos.ipynb`: notebook de tabelas e graficos.
 
 ## Metodologia
 
-Os benchmarks principais executam o Counting Sort em tres tamanhos de entrada:
+O Counting Sort tem complexidade teorica `O(n + k)`, onde:
 
-- pequena: `1.000` elementos;
-- media: `10.000` elementos;
-- grande: `1.000.000` elementos.
+- `n` e a quantidade de elementos do vetor;
+- `k` e o intervalo de valores possiveis.
 
-Para cada tamanho, sao testados tres casos:
+Como a ordem inicial do vetor nao altera significativamente o comportamento do Counting Sort, os cenarios do benchmark principal foram definidos variando `k` e mantendo `n` fixo:
 
-- melhor caso: vetor ja ordenado;
-- caso medio: vetor pseudoaleatorio;
-- pior caso: vetor em ordem inversa.
+| Cenario | n | k |
+| --- | ---: | ---: |
+| melhor | 1.000.000 | 100 |
+| medio | 1.000.000 | 1.000.000 |
+| pior | 1.000.000 | 100.000.000 |
 
-Cada combinacao de linguagem, tamanho e caso e executada `30` vezes. Os CSVs registram a linguagem, o caso, o tamanho `n`, o valor de `k`, a rodada, o tempo em segundos e se a saida ficou ordenada.
+Cada cenario e executado 30 vezes por linguagem.
 
-No Counting Sort, a complexidade teorica e `O(n + k)`, onde `n` e o tamanho da entrada e `k` e o intervalo de valores. Nos testes principais, `k = n`.
+Para garantir comparacao justa, o arquivo `analise/dados/entradas_benchmark.csv` registra o plano compartilhado de entradas com `caso`, `n`, `k`, `execucao` e `seed`. Python e Rust leem esse mesmo plano e reconstroem os mesmos vetores a partir das mesmas sementes.
+
+Os CSVs de resultado tambem registram `checksum_entrada`, uma assinatura calculada sobre o vetor antes da ordenacao. O notebook valida que os checksums de Python e Rust sao iguais em cada execucao, comprovando que as duas linguagens processaram a mesma entrada.
 
 ## Como executar
 
@@ -78,6 +80,8 @@ Rode o fluxo completo:
 powershell -ExecutionPolicy Bypass -File .\scripts\windows\run_all.ps1
 ```
 
+Antes de iniciar, o fluxo completo remove automaticamente as saidas anteriores. Durante os benchmarks, uma barra textual atualizada na mesma linha mostra o progresso das 180 medicoes (`90` em Python e `90` em Rust), a porcentagem concluida e o tempo acumulado no formato `HH:MM:SS`. Ao final, o script informa o tempo de cada etapa e o tempo total.
+
 Ou rode por partes:
 
 ```powershell
@@ -89,58 +93,6 @@ Para limpar somente as saidas geradas:
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File .\scripts\windows\clean_outputs.ps1
-```
-
-Os comandos abaixo tambem podem ser executados manualmente.
-
-Gere o CSV principal do Python:
-
-```powershell
-python .\python\benchmark\counting_sort.py
-```
-
-Gere o CSV principal do Rust em modo otimizado:
-
-```powershell
-cargo run --release --manifest-path .\rust\Cargo.toml
-```
-
-Gere os CSVs complementares da variacao de `k`:
-
-```powershell
-python .\python\benchmark\variacao_k.py
-cargo run --release --manifest-path .\rust\Cargo.toml --bin variacao_k
-```
-
-Execute as versoes didaticas para visualizar o funcionamento do algoritmo:
-
-```powershell
-python .\python\visualizacao\counting_sort_visual.py
-cargo run --manifest-path .\rust\Cargo.toml --bin visualizacao
-```
-
-Essas versoes usam um pequeno atraso automatico entre as etapas. Para controlar a velocidade:
-
-```powershell
-python .\python\visualizacao\counting_sort_visual.py --fast
-python .\python\visualizacao\counting_sort_visual.py --slow
-python .\python\visualizacao\counting_sort_visual.py --no-delay
-
-cargo run --manifest-path .\rust\Cargo.toml --bin visualizacao -- --fast
-cargo run --manifest-path .\rust\Cargo.toml --bin visualizacao -- --slow
-cargo run --manifest-path .\rust\Cargo.toml --bin visualizacao -- --no-delay
-```
-
-Gere o arquivo do ambiente de execucao:
-
-```powershell
-python .\python\ambiente_execucao.py
-```
-
-Abra o notebook de analise:
-
-```powershell
-jupyter notebook .\analise\notebooks\padronizacao_graficos.ipynb
 ```
 
 ### Ubuntu / Bash
@@ -156,6 +108,8 @@ Rode o fluxo completo:
 ```bash
 bash scripts/linux/run_all.sh
 ```
+
+Antes de iniciar, o fluxo completo remove automaticamente as saidas anteriores. Durante os benchmarks, uma barra textual atualizada na mesma linha mostra o progresso das 180 medicoes (`90` em Python e `90` em Rust), a porcentagem concluida e o tempo acumulado no formato `HH:MM:SS`. Ao final, o script informa o tempo de cada etapa e o tempo total.
 
 Ou rode por partes:
 
@@ -174,27 +128,31 @@ bash scripts/linux/clean_outputs.sh
 
 Os benchmarks geram dados brutos em `analise/dados/`:
 
+- `entradas_benchmark.csv`
 - `resultados_python.csv`
 - `resultados_rust.csv`
-- `resultados_python_variacao_k.csv`
-- `resultados_rust_variacao_k.csv`
 
 O notebook gera tabelas em `analise/tabelas/`:
 
+- `plano_entradas_benchmark.csv`
+- `verificacao_checksums.csv`
+- `comparacao_checksums_entradas.csv`
 - `resumo_tempos.csv`
 - `resumo_tempos_com_teoria.csv`
-- `resumo_variacao_k.csv`
+- `resumo_cenarios.csv`
 - `speedup_rust_vs_python.csv`
+- `speedup_rust_vs_python_por_execucao.csv`
+- `velocidade_linguagens.csv`
 
 O notebook gera graficos em `analise/graficos/`:
 
-- `01_tempos_reais_log.png`
-- `02_real_vs_teorico_log.png`
-- `03_comparacao_linguagens_barras_log.png`
-- `04_velocidade_linguagens_log.png`
-- `05_speedup_rust_vs_python.png`
-- `06_variacao_k_tempos_log.png`
-- `07_variacao_k_real_vs_teorico_log.png`
+- `00_verificacao_checksums.png`
+- `01_tempo_por_k_com_desvio_log.png`
+- `02_real_vs_teorico_por_k_log.png`
+- `03_real_vs_teorico_tres_cenarios.png`
+- `04_cenarios_com_desvio.png`
+- `05_speedup_rust_vs_python_cenarios.png`
+- `06_velocidade_linguagens_cenarios.png`
 
 O ambiente de execucao fica em:
 
@@ -202,8 +160,10 @@ O ambiente de execucao fica em:
 
 ## Observacoes para o relatorio
 
-Embora os casos ordenado, aleatorio e inversamente ordenado sejam usados conforme o protocolo experimental, a ordem inicial do vetor influencia pouco o Counting Sort. O fator mais relevante e o intervalo `k`, pois o algoritmo precisa alocar e percorrer o vetor de contagem.
+O ponto principal da analise e que Counting Sort nao apresenta melhor, medio e pior caso relevantes pela ordenacao inicial do vetor. O crescimento e explicado por `n + k`.
 
-Por isso, uma conclusao importante e que Counting Sort e eficiente quando `k` nao e muito maior que `n`, mas pode se tornar inadequado quando o intervalo de valores e muito grande.
+Como `n` permanece fixo em `1.000.000`, a diferenca entre os cenarios vem do aumento de `k`. O pior cenario exige um vetor de contagem muito grande, o que aumenta tempo de execucao e uso de memoria.
 
-O experimento complementar de variacao de `k` mantem `n = 100.000` e mede tres cenarios: `k = 100`, `k = 100.000` e `k = 1.000.000`. Esses dados nao substituem os cenarios exigidos pelo professor; eles servem para evidenciar a parcela `k` da complexidade `O(n + k)`.
+Os graficos exibem a media das 30 execucoes com desvio padrao. A curva teorica `c*(n+k)` e ajustada aos dados reais para mostrar a aderencia entre experimento e teoria.
+
+O fluxo oficial do projeto usa `counting_sort.py`, `main.rs` e o plano compartilhado `entradas_benchmark.csv`.

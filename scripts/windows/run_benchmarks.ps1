@@ -14,16 +14,55 @@ function Invoke-NativeChecked {
     }
 }
 
-Write-Host "==> Gerando CSV principal do Python"
-Invoke-NativeChecked { & $PythonBin ".\python\benchmark\counting_sort.py" }
+function Format-Duration {
+    param([TimeSpan]$Duration)
+    return "{0:00}:{1:00}:{2:00}" -f [math]::Floor($Duration.TotalHours), $Duration.Minutes, $Duration.Seconds
+}
 
-Write-Host "==> Gerando CSV principal do Rust"
-Invoke-NativeChecked { cargo run --release --manifest-path ".\rust\Cargo.toml" }
+function Invoke-BenchmarkStep {
+    param(
+        [int]$Step,
+        [int]$Total,
+        [string]$Name,
+        [scriptblock]$Command
+    )
 
-Write-Host "==> Gerando CSV complementar de variacao de k em Python"
-Invoke-NativeChecked { & $PythonBin ".\python\benchmark\variacao_k.py" }
+    Write-Host "    -> [$Step/$Total] $Name"
+    $stopwatch = [System.Diagnostics.Stopwatch]::StartNew()
+    & $Command
+    $stopwatch.Stop()
+    Write-Host "       Concluido em $(Format-Duration $stopwatch.Elapsed)."
+}
 
-Write-Host "==> Gerando CSV complementar de variacao de k em Rust"
-Invoke-NativeChecked { cargo run --release --manifest-path ".\rust\Cargo.toml" --bin variacao_k }
+$totalStopwatch = [System.Diagnostics.Stopwatch]::StartNew()
 
-Write-Host "Benchmarks concluidos."
+Invoke-BenchmarkStep 1 3 "Gerando plano compartilhado de entradas" {
+    Invoke-NativeChecked { & $PythonBin ".\python\benchmark\entradas_benchmark.py" }
+}
+
+Invoke-BenchmarkStep 2 3 "Executando benchmark do Python" {
+    $env:BENCHMARK_PROGRESS_OFFSET = "0"
+    $env:BENCHMARK_PROGRESS_TOTAL = "180"
+    try {
+        Invoke-NativeChecked { & $PythonBin ".\python\benchmark\counting_sort.py" }
+    }
+    finally {
+        Remove-Item Env:BENCHMARK_PROGRESS_OFFSET -ErrorAction SilentlyContinue
+        Remove-Item Env:BENCHMARK_PROGRESS_TOTAL -ErrorAction SilentlyContinue
+    }
+}
+
+Invoke-BenchmarkStep 3 3 "Executando benchmark do Rust" {
+    $env:BENCHMARK_PROGRESS_OFFSET = "90"
+    $env:BENCHMARK_PROGRESS_TOTAL = "180"
+    try {
+        Invoke-NativeChecked { cargo run --release --manifest-path ".\rust\Cargo.toml" }
+    }
+    finally {
+        Remove-Item Env:BENCHMARK_PROGRESS_OFFSET -ErrorAction SilentlyContinue
+        Remove-Item Env:BENCHMARK_PROGRESS_TOTAL -ErrorAction SilentlyContinue
+    }
+}
+
+$totalStopwatch.Stop()
+Write-Host "Benchmarks concluidos em $(Format-Duration $totalStopwatch.Elapsed)."

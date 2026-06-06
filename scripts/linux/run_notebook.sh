@@ -19,6 +19,7 @@ fi
 export MPLCONFIGDIR="$ROOT_DIR/analise/matplotlib_config"
 mkdir -p "$MPLCONFIGDIR"
 
+START_TIME=$SECONDS
 echo "==> Executando notebook de analise"
 "$PYTHON_BIN" -m jupyter nbconvert \
   --to notebook \
@@ -26,4 +27,8 @@ echo "==> Executando notebook de analise"
   --output "padronizacao_graficos_executado.ipynb" \
   --output-dir "$ROOT_DIR/analise/notebooks"
 
-echo "Notebook executado."
+ELAPSED=$((SECONDS - START_TIME))
+printf 'Notebook executado em %02d:%02d:%02d.\n' \
+  $((ELAPSED / 3600)) \
+  $(((ELAPSED % 3600) / 60)) \
+  $((ELAPSED % 60))

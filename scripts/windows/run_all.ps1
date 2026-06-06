@@ -14,13 +14,49 @@ function Invoke-NativeChecked {
     }
 }
 
-Write-Host "==> Registrando ambiente de execucao"
-Invoke-NativeChecked { & $PythonBin ".\python\ambiente_execucao.py" }
+function Format-Duration {
+    param([TimeSpan]$Duration)
+    return "{0:00}:{1:00}:{2:00}" -f [math]::Floor($Duration.TotalHours), $Duration.Minutes, $Duration.Seconds
+}
 
-Write-Host "==> Rodando benchmarks"
-& ".\scripts\windows\run_benchmarks.ps1"
+function Invoke-TimedStep {
+    param(
+        [int]$Step,
+        [int]$Total,
+        [string]$Name,
+        [scriptblock]$Command
+    )
 
-Write-Host "==> Gerando tabelas e graficos"
-& ".\scripts\windows\run_notebook.ps1"
+    Write-Host "==> [$Step/$Total] $Name"
 
-Write-Host "Fluxo completo concluido."
+    $stopwatch = [System.Diagnostics.Stopwatch]::StartNew()
+    & $Command
+    $stopwatch.Stop()
+
+    Write-Host "    Etapa concluida em $(Format-Duration $stopwatch.Elapsed)."
+}
+
+$totalStopwatch = [System.Diagnostics.Stopwatch]::StartNew()
+
+try {
+    Invoke-TimedStep 1 4 "Limpando saidas anteriores" {
+        & ".\scripts\windows\clean_outputs.ps1"
+    }
+
+    Invoke-TimedStep 2 4 "Registrando ambiente de execucao" {
+        Invoke-NativeChecked { & $PythonBin ".\python\ambiente_execucao.py" }
+    }
+
+    Invoke-TimedStep 3 4 "Rodando benchmarks" {
+        & ".\scripts\windows\run_benchmarks.ps1"
+    }
+
+    Invoke-TimedStep 4 4 "Gerando tabelas e graficos" {
+        & ".\scripts\windows\run_notebook.ps1"
+    }
+}
+finally {
+    $totalStopwatch.Stop()
+}
+
+Write-Host "Fluxo completo concluido em $(Format-Duration $totalStopwatch.Elapsed)."
