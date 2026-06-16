@@ -80,6 +80,8 @@ Rode o fluxo completo:
 powershell -ExecutionPolicy Bypass -File .\scripts\windows\run_all.ps1
 ```
 
+Tempo estimado: a execucao completa costuma levar aproximadamente entre 5 e 7 minutos, dependendo do computador. Isso ocorre porque o benchmark realiza 180 medicoes no total e inclui o cenario mais pesado com `n = 1.000.000` e `k = 100.000.000`.
+
 Antes de iniciar, o fluxo completo remove automaticamente as saidas anteriores. Durante os benchmarks, uma barra textual atualizada na mesma linha mostra o progresso das 180 medicoes (`90` em Python e `90` em Rust) e a porcentagem concluida. Ao final, o script informa o tempo de cada etapa e o tempo total no formato `HH:MM:SS`.
 
 Ou rode por partes:
@@ -108,6 +110,8 @@ Rode o fluxo completo:
 ```bash
 bash scripts/linux/run_all.sh
 ```
+
+Tempo estimado: a execucao completa costuma levar aproximadamente entre 5 e 7 minutos, dependendo do computador. Isso ocorre porque o benchmark realiza 180 medicoes no total e inclui o cenario mais pesado com `n = 1.000.000` e `k = 100.000.000`.
 
 Antes de iniciar, o fluxo completo remove automaticamente as saidas anteriores. Durante os benchmarks, uma barra textual atualizada na mesma linha mostra o progresso das 180 medicoes (`90` em Python e `90` em Rust) e a porcentagem concluida. Ao final, o script informa o tempo de cada etapa e o tempo total no formato `HH:MM:SS`.
 
