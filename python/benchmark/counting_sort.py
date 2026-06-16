@@ -130,12 +130,10 @@ def run_benchmark():
                 completed_runs += 1
                 total_completed = progress_offset + completed_runs
                 progress_percent = total_completed / progress_total * 100
-                total_elapsed = perf_counter() - benchmark_start
                 progress_message = (
                     f"[Python] {case_name} - execucao {run}/30 "
                     f"- {progress_bar(total_completed, progress_total)} "
-                    f"{total_completed}/{progress_total} ({progress_percent:.1f}%) "
-                    f"- tempo acumulado: {format_duration(total_elapsed)}"
+                    f"{total_completed}/{progress_total} ({progress_percent:.1f}%)"
                 )
                 print(f"\r{progress_message:<170}", end="", flush=True)
 

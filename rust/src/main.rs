@@ -236,18 +236,16 @@ fn run_benchmark() -> std::io::Result<()> {
         completed_runs += 1;
         let total_completed = progress_offset + completed_runs;
         let progress_percent = total_completed as f64 / progress_total as f64 * 100.0;
-        let elapsed = format_duration(benchmark_start.elapsed().as_secs());
         let bar = progress_bar(total_completed, progress_total, 30);
         let progress_message = format!(
-            "[Rust] {} - execucao {}/{} - {} {}/{} ({:.1}%) - tempo acumulado: {}",
+            "[Rust] {} - execucao {}/{} - {} {}/{} ({:.1}%)",
             input.case_name,
             input.run,
             RUNS,
             bar,
             total_completed,
             progress_total,
-            progress_percent,
-            elapsed
+            progress_percent
         );
         print!("\r{:<170}", progress_message);
         std::io::stdout().flush()?;
