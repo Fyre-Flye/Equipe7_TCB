@@ -2,6 +2,13 @@
 
 Projeto de Teoria da Computacao para analisar o algoritmo Counting Sort em duas linguagens: Python e Rust.
 
+## Integrantes
+
+- Arthur Xavier
+- Gustavo Oliveira
+- Jose Vitor
+- Talita Fraga
+
 ## Estrutura
 
 ```text
